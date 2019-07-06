@@ -102,5 +102,14 @@ describe VendingMachine do
       vending_machine.sell(code: 'A2', coins: [2.00])
       expect { vending_machine.sell(code: 'A2', coins: [2.00]) }.to raise_error 'Out of stock.'
     end
+
+    it 'returns no change when exact money is inserted' do
+      inventory = [
+        { name: 'Twix', price: 0.45, code: 'A1', quantity: 1 }
+      ]
+      vending_machine = VendingMachine.new(inventory: inventory, coins: [])
+      purchased = { purchased: 'Twix', change: [] }
+      expect(vending_machine.sell(code: 'A1', coins: [0.20, 0.20, 0.05])).to eq purchased
+    end
   end
 end
