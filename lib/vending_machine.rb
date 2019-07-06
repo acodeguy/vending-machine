@@ -28,6 +28,8 @@ class VendingMachine
 
   def sell(code:, coins: [])
     item = @inventory.find { |i| i[:code] == code }
+    raise 'Insufficient funds.' if coins.sum < item[:price]
+
     returned_coins = calculate_change(price: item[:price], coins_in: coins)
     { purchased: item[:name], change: returned_coins }
   end

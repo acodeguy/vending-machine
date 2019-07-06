@@ -66,5 +66,17 @@ describe VendingMachine do
       exp_result = { purchased: 'Buttons', change: [0.05, 1.00] }
       expect(vending_machine.sell(code: 'A2', coins: [2.00])).to eq exp_result
     end
+
+    it 'asks for more money if the money inserted is not enogh' do
+      inventory = [
+        { name: 'Twix', price: 0.45, code: 'A1', quantity: 1 },
+        { name: 'Buttons', code: 'A2', price: 0.95, quantity: 1 },
+        { name: 'Soda', code: 'A3', price: 1.50, quantity: 1 },
+        { name: 'Gum', code: 'A4', price: 0.35, quantity: 0 }
+      ]
+      vending_machine = VendingMachine.new(inventory: inventory)
+      coins = [0.20, 0.20]
+      expect { vending_machine.sell(code: 'A1', coins: coins) }.to raise_error 'Insufficient funds.'
+    end
   end
 end
