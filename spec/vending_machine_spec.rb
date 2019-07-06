@@ -30,4 +30,26 @@ describe VendingMachine do
       expect(vending_machine.coins_available).to eq expected_coins
     end
   end
+
+  context '#load_items' do
+    it 'adds supplied items to its inventory' do
+      inventory = [
+        { name: 'Twix', price: 0.45, code: 'A1', quantity: 1 },
+        { name: 'Buttons', code: 'A2', price: 0.95, quantity: 1 },
+        { name: 'Soda', code: 'A3', price: 1.50, quantity: 1 },
+        { name: 'Gum', code: 'A4', price: 0.35, quantity: 0 }
+      ]
+      vending_machine = VendingMachine.new(inventory: inventory)
+      new_stock = [
+        { name: 'Swizzles', code: 'A5', price: 1.25, quantity: 2 },
+        { name: 'Dip Dab', code: 'A6', price: 0.40, quantity: 2 },
+        { name: 'Twix', price: 0.45, code: 'A1', quantity: 1 }
+      ]
+      vending_machine.load_items(items: new_stock)
+      expect(vending_machine.inventory).to include new_stock.first
+      expect(vending_machine.inventory).to include new_stock[1]
+      two_twix_bars = { name: 'Twix', price: 0.45, code: 'A1', quantity: 2 }
+      expect(vending_machine.inventory).to include(two_twix_bars)
+    end
+  end
 end
