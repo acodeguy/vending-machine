@@ -52,4 +52,19 @@ describe VendingMachine do
       expect(vending_machine.inventory).to include(two_twix_bars)
     end
   end
+
+  context '#sell' do
+    it 'dispenses the correct item and coins for change' do
+      inventory = [
+        { name: 'Twix', price: 0.45, code: 'A1', quantity: 1 },
+        { name: 'Buttons', code: 'A2', price: 0.95, quantity: 1 },
+        { name: 'Soda', code: 'A3', price: 1.50, quantity: 1 },
+        { name: 'Gum', code: 'A4', price: 0.35, quantity: 0 }
+      ]
+      coins = [0.01, 0.02, 0.05, 0.10, 0.20, 0.50, 1.00, 2.00]
+      vending_machine = VendingMachine.new(inventory: inventory, coins: coins)
+      exp_result = { purchased: 'Buttons', change: [0.05, 1.00] }
+      expect(vending_machine.sell(code: 'A2', coins: [2.00])).to eq exp_result
+    end
+  end
 end
