@@ -1,11 +1,12 @@
 require './lib/vending_machine'
 
 describe VendingMachine do
+  let(:initial_coins) { [0.01, 0.02, 0.05, 0.10, 0.20, 0.50, 1.00, 2.00] }
+
   context '#new' do
     it 'loads an initial set coins (to make change)' do
-      coins = [0.01, 0.02, 0.05, 0.10]
-      vending_machine = VendingMachine.new(coins: coins)
-      expect(vending_machine.coins_available).to eq coins
+      vending_machine = VendingMachine.new(coins: initial_coins)
+      expect(vending_machine.coins_available).to eq initial_coins
     end
 
     it 'loads an initial inventory of items' do
@@ -22,7 +23,6 @@ describe VendingMachine do
 
   context '#load_coins' do
     it 'adds supplied coins to the machine' do
-      initial_coins = [0.01, 0.01, 0.01]
       vending_machine = VendingMachine.new(coins: initial_coins)
       additional_coins = [0.20, 0.05]
       vending_machine.load_coins(coins: additional_coins)
@@ -61,8 +61,7 @@ describe VendingMachine do
         { name: 'Soda', code: 'A3', price: 1.50, quantity: 1 },
         { name: 'Gum', code: 'A4', price: 0.35, quantity: 0 }
       ]
-      coins = [0.01, 0.02, 0.05, 0.10, 0.20, 0.50, 1.00, 2.00]
-      vending_machine = VendingMachine.new(inventory: inventory, coins: coins)
+      vending_machine = VendingMachine.new(inventory: inventory, coins: initial_coins)
       exp_result = { purchased: 'Buttons', change: [0.05, 1.00] }
       expect(vending_machine.sell(code: 'A2', coins: [2.00])).to eq exp_result
     end
@@ -98,7 +97,7 @@ describe VendingMachine do
         { name: 'Soda', code: 'A3', price: 1.50, quantity: 1 },
         { name: 'Gum', code: 'A4', price: 0.35, quantity: 0 }
       ]
-      vending_machine = VendingMachine.new(inventory: inventory, coins: [2.00])
+      vending_machine = VendingMachine.new(inventory: inventory)
       vending_machine.sell(code: 'A2', coins: [2.00])
       expect { vending_machine.sell(code: 'A2', coins: [2.00]) }.to raise_error 'Out of stock.'
     end
@@ -107,7 +106,7 @@ describe VendingMachine do
       inventory = [
         { name: 'Twix', price: 0.45, code: 'A1', quantity: 1 }
       ]
-      vending_machine = VendingMachine.new(inventory: inventory, coins: [])
+      vending_machine = VendingMachine.new(inventory: inventory)
       purchased = { purchased: 'Twix', change: [] }
       expect(vending_machine.sell(code: 'A1', coins: [0.20, 0.20, 0.05])).to eq purchased
     end
