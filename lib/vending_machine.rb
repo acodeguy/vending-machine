@@ -29,13 +29,20 @@ class VendingMachine
   def sell(code:, coins: [])
     item = @inventory.find { |i| i[:code] == code }
     raise 'Item not found.' if item.nil?
+    raise 'Out of stock.' unless item[:quantity].positive?
     raise 'Insufficient funds.' if coins.sum < item[:price]
 
     returned_coins = calculate_change(price: item[:price], coins_in: coins)
+    decrement_stock(code: item[:code])
     { purchased: item[:name], change: returned_coins }
   end
 
   private
+
+  def decrement_stock(code:)
+    index = @inventory.find_index { |inv_item| inv_item[:code] == code }
+    @inventory[index][:quantity] -= 1
+  end
 
   def calculate_change(price: 0, coins_in: [])
     change_due = coins_in.sum - price

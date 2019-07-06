@@ -90,5 +90,17 @@ describe VendingMachine do
       coins = [0.00]
       expect { vending_machine.sell(code: 'X1', coins: coins) }.to raise_error 'Item not found.'
     end
+
+    it 'decreases its inventory when an item is sold' do
+      inventory = [
+        { name: 'Twix', price: 0.45, code: 'A1', quantity: 1 },
+        { name: 'Buttons', code: 'A2', price: 0.95, quantity: 1 },
+        { name: 'Soda', code: 'A3', price: 1.50, quantity: 1 },
+        { name: 'Gum', code: 'A4', price: 0.35, quantity: 0 }
+      ]
+      vending_machine = VendingMachine.new(inventory: inventory, coins: [2.00])
+      vending_machine.sell(code: 'A2', coins: [2.00])
+      expect { vending_machine.sell(code: 'A2', coins: [2.00]) }.to raise_error 'Out of stock.'
+    end
   end
 end
