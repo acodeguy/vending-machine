@@ -19,4 +19,15 @@ describe VendingMachine do
       expect(vending_machine.inventory).to eq inventory
     end
   end
+
+  context '#load_coins' do
+    it 'adds supplied coins to the machine' do
+      initial_coins = [0.01, 0.01, 0.01]
+      vending_machine = VendingMachine.new(coins: initial_coins)
+      additional_coins = [0.20, 0.05]
+      vending_machine.load_coins(coins: additional_coins)
+      expected_coins = initial_coins.concat(additional_coins).sort
+      expect(vending_machine.coins_available).to eq expected_coins
+    end
+  end
 end
