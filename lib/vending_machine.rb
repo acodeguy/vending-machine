@@ -1,8 +1,7 @@
 # a vending machine object
 class VendingMachine
   attr_reader :inventory
-
-  def initialize(coins: [], inventory: [])
+  def initialize(coins: [], inventory: Inventory.new)
     @coins_available = coins
     @inventory = inventory
   end
@@ -15,34 +14,17 @@ class VendingMachine
     @coins_available.sort
   end
 
-  def load_items(items: [])
-    items.each do |item|
-      index = @inventory.find_index { |inv_item| inv_item[:code] == item[:code] }
-      if index
-        @inventory[index][:quantity] += item[:quantity]
-      else
-        @inventory << item
-      end
-    end
-  end
-
   def sell(code:, coins: [])
-    item = @inventory.find { |i| i[:code] == code }
-    raise 'Item not found.' if item.nil?
-    raise 'Out of stock.' unless item[:quantity].positive?
-    raise 'Insufficient funds.' if coins.sum < item[:price]
+    return 'Item not found.' unless @inventory.check_stock(code: code).positive?
+    return 'Insert more money, try again.' unless coins.sum >= @inventory.check_price(code: code)
 
-    returned_coins = calculate_change(price: item[:price], coins_in: coins)
-    decrement_stock(code: item[:code])
-    { purchased: item[:name], change: returned_coins }
+    item_name = @inventory.vend(code: code)
+    item_price = @inventory.check_price(code: code)
+    coins_out = calculate_change(price: item_price, coins_in: coins)
+    { purchased: item_name, change: coins_out }
   end
 
   private
-
-  def decrement_stock(code:)
-    index = @inventory.find_index { |inv_item| inv_item[:code] == code }
-    @inventory[index][:quantity] -= 1
-  end
 
   def calculate_change(price: 0, coins_in: [])
     change_due = coins_in.sum - price
