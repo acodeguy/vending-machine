@@ -1,13 +1,14 @@
 # Vending Machine
+[![Build Status](https://travis-ci.org/acodeguy/vending-machine.svg?branch=master)](https://travis-ci.org/acodeguy/vending-machine) [![Maintainability](https://api.codeclimate.com/v1/badges/7674244ea945e8484548/maintainability)](https://codeclimate.com/github/acodeguy/vending-machine/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/7674244ea945e8484548/test_coverage)](https://codeclimate.com/github/acodeguy/vending-machine/test_coverage) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0484f5786dc148fea521b7d5d7b1618a)](https://www.codacy.com/app/acodeguy/vending-machine?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=acodeguy/vending-machine&amp;utm_campaign=Badge_Grade)
 
 ## The Challenge
 Design a vending machine that behaves as follows:
-* The selected item is returned if enough money is inserted
-* It should give change where necessary
-* It should ask for more more if not enough was inserted
-* It should start with an initial load of items and coins (for change)
-* It should allow re-loading of coins/items at a later point
-* It should keep track of its items and coins
+*  The selected item is returned if enough money is inserted
+*  It should give change where necessary
+*  It should ask for more more if not enough was inserted
+*  It should start with an initial load of items and coins (for change)
+*  It should allow re-loading of coins/items at a later point
+*  It should keep track of its items and coins
 
 ## Approach
 I chose to carve-off the inventory functionality into its own class and give the option to inject the inventory dependency into the VendingMachine object on creation, leaving the VendingMachine objct open to get its inventory from another source.
@@ -104,6 +105,6 @@ vending_machine.inventory.load_items(items: new_stock)
 Your vending machine is ready to dispense new goodies again!
 
 ## Dependencies
-* Ruby 2.6.0
-* RSpec
-* Rubocop
+*  Ruby 2.6.0
+*  RSpec
+*  Rubocop
