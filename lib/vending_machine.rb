@@ -15,7 +15,7 @@ class VendingMachine
   end
 
   def sell(code:, coins: [])
-    return 'Item not found.' unless @inventory.check_stock(code: code).positive?
+    return 'Out of stock.' unless @inventory.check_stock(code: code).positive?
     return 'Insert more money, try again.' unless coins.sum >= @inventory.check_price(code: code)
 
     item_name = @inventory.vend(code: code)

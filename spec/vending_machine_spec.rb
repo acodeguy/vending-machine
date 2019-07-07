@@ -66,7 +66,7 @@ describe VendingMachine do
       allow(inventory).to receive_messages(
         check_stock: 0
       )
-      expect(vending_machine.sell(code: 'X1', coins: coins)).to eq 'Item not found.'
+      expect(vending_machine.sell(code: 'X1', coins: coins)).to eq 'Out of stock.'
     end
 
     it 'returns no change when exact money is inserted' do
