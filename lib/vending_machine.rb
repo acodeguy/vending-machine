@@ -15,13 +15,12 @@ class VendingMachine
   end
 
   def sell(code:, coins: [])
-    return 'Out of stock.' unless @inventory.check_stock(code: code).positive?
-    return 'Insert more money, try again.' unless coins.sum >= @inventory.check_price(code: code)
+    return 'Item not found.' unless item = @inventory.get_item(code: code)
+    return 'Out of stock.' unless item[:quantity].positive?
+    return 'Insert more money, try again.' unless coins.sum >= item[:price]
 
-    item_name = @inventory.vend(code: code)
-    item_price = @inventory.check_price(code: code)
-    coins_out = calculate_change(price: item_price, coins_in: coins)
-    { purchased: item_name, change: coins_out }
+    coins_out = calculate_change(price: item[:price], coins_in: coins)
+    { purchased: item[:name], change: coins_out }
   end
 
   private

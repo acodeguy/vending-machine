@@ -42,9 +42,8 @@ describe VendingMachine do
     it 'dispenses the correct item and coins for change' do
       vending_machine = VendingMachine.new(inventory: inventory, coins: initial_coins)
       allow(inventory).to receive_messages(
-        check_stock: 1,
-        check_price: 0.95,
-        vend: 'Buttons'
+        vend: 'Buttons',
+        get_item: stock[1]
       )
       exp_result = { purchased: 'Buttons', change: [0.05, 1.00] }
       expect(vending_machine.sell(code: 'A2', coins: [2.00])).to eq exp_result
@@ -52,28 +51,35 @@ describe VendingMachine do
 
     it 'asks for more money if the money inserted is not enough' do
       allow(inventory).to receive_messages(
-        check_stock: 1,
-        check_price: 0.45
+        get_item: stock[0]
       )
       vending_machine = VendingMachine.new(inventory: inventory)
       coins = [0.20, 0.20]
       expect(vending_machine.sell(code: 'A1', coins: coins)).to eq 'Insert more money, try again.'
     end
 
-    it 'returns an error if the item entered does not exist/is out of stock' do
+    it 'returns an error if the item entered does not exist' do
       vending_machine = VendingMachine.new(inventory: inventory)
       coins = [0.00]
       allow(inventory).to receive_messages(
-        check_stock: 0
+        get_item: false
       )
-      expect(vending_machine.sell(code: 'X1', coins: coins)).to eq 'Out of stock.'
+      expect(vending_machine.sell(code: 'X1', coins: coins)).to eq 'Item not found.'
+    end
+
+    it 'returns an error if the item entered does is out of stock' do
+      vending_machine = VendingMachine.new(inventory: inventory)
+      coins = [0.00]
+      allow(inventory).to receive_messages(
+        get_item: stock[3]
+      )
+      expect(vending_machine.sell(code: 'A4', coins: coins)).to eq 'Out of stock.'
     end
 
     it 'returns no change when exact money is inserted' do
       purchased = { purchased: 'Twix', change: [] }
       allow(inventory).to receive_messages(
-        check_stock: 1,
-        check_price: 0.45,
+        get_item: stock[0],
         vend: 'Twix'
       )
       vending_machine = VendingMachine.new(inventory: inventory)

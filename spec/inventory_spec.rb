@@ -33,7 +33,8 @@ describe Inventory do
       inventory = Inventory.new(items: initial_stock)
       stock_code = 'A1'
       inventory.vend(code: stock_code)
-      expect(inventory.check_stock(code: stock_code)).to eq 0
+      item = inventory.get_item(code: stock_code)
+      expect(item[:quantity]).to eq 0
     end
 
     it 'returns the item selected item' do
@@ -47,7 +48,8 @@ describe Inventory do
     it 'returns the price of the item' do
       inventory = Inventory.new(items: initial_stock)
       stock_code = 'A1'
-      expect(inventory.check_price(code: stock_code)).to eq 0.45
+      item = inventory.get_item(code: stock_code)
+      expect(item[:price]).to eq 0.45
     end
   end
 end

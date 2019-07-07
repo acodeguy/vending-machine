@@ -8,7 +8,7 @@ class Inventory
 
   def vend(code:)
     item = items.find { |i| i[:code] == code }
-    raise 'Out of stock.' unless item[:quantity].positive?
+    # raise 'Out of stock.' unless item[:quantity].positive?
 
     decrement_stock(code: item[:code])
     item[:name]
@@ -25,18 +25,11 @@ class Inventory
     end
   end
 
-  def check_stock(code:)
+  def get_item(code:)
     item = items.find { |i| i[:code] == code }
     return false if item.nil?
 
-    item[:quantity]
-  end
-
-  def check_price(code:)
-    item = items.find { |i| i[:code] == code }
-    return false if item.nil?
-
-    item[:price]
+    item
   end
 
   private
