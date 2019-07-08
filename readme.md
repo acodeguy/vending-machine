@@ -11,14 +11,28 @@ Design a vending machine that behaves as follows:
 *  It should keep track of its items and coins
 
 ## Approach
-I chose to carve-off the inventory functionality into its own class and give the option to inject the inventory dependency into the VendingMachine object on creation, leaving the VendingMachine objct open to get its inventory from another source.
+I chose that this program will run in IRB to I chose to use IRB to write my feature tests which I then used to write my test suite with RSpec.
+
+As the VendingMachine class grew, I chose to carve-off the inventory functionality into its own class and give the option to inject the inventory dependency into the VendingMachine object on creation, leaving the VendingMachine object open to get its inventory from another source.
+
+## Dependencies
+This project has the following dependencies that will be installed automatically after running bundle install in the next section.
+
+*  Ruby 2.6.0
+*  RSpec
+*  Rubocop
+*  Simplecov
 
 ## Getting Started
+Make sure you have Ruby 2.6.0 installed before you begin. I recommend [RVM](https://rvm.io/) to manage your installed Ruby versions.
+
 To clone the repo to your hard drive and install all necessary dependencies, run the following:
 
 ```bash
 git clone git@github.com:acodeguy/vending-machine.git
+
 cd vending-machine
+
 bundle install
 ```
 
@@ -27,16 +41,17 @@ After installing all dependencies as above using the bundle command, feel free t
 ```bash
 rspec
 ```
+This project has 100% coverage over 12 test examples.
 
 ## Using the Vending Machine
-Fire-up IRB with the two RUby source files included:
+Fire-up IRB with the two Ruby source files included:
 
 ```bash
 irb -r ./lib/inventory.rb -r ./lib/vending_machine.rb
 ```
 I recommend having an Inventory created first. Inventory objects can be created with an array of items:
 
-### Preparing the inital stock and change
+### Preparing the initial stock and change
 ```ruby
 stock = [
   { name: 'Twix', price: 0.45, code: 'A1', quantity: 1 },
@@ -56,6 +71,7 @@ Our machine is ready to dispense! Let's buy a Twix (code A1) with a £2 coin and
 ### Buying an item
 ```ruby
 vending_machine.sell(code: 'A1', coins: [2.00])
+
 => {:purchased=>"Twix", :change=>[0.05, 0.5, 1.0]}
 ```
 Above, IRB returns a hash with the name of the item bought and your change in coins. The vending machine is designed to give you the fewest number of coins possible when returning change; who wants £1.55 in 1p coins!
@@ -69,6 +85,7 @@ Checking the inventory will show that we're now sold-out of Twix bars:
  You'll also notice that the coin we paid with is now available inside the machine's array of coins to make change in the future. The coins given as change for the Twix bar are also not available anymore (compared to the initial_coins array). Nice.
  ```ruby
  vending_machine.coins_available
+
  => [0.01, 0.02, 0.1, 0.2, 2.0, 2.0] 
  ```
 
@@ -77,6 +94,7 @@ Checking the inventory will show that we're now sold-out of Twix bars:
  To load the machine with more coins, let's first check what's in the machine:
  ```ruby
  vending_machine.coins_available
+
 => [0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1.0, 2.0]
 ```
 Let's load another three 50p coins, then check again:
@@ -92,7 +110,7 @@ vending_machine.coins_available
 Notice there are now four 50p coins where there was only one before.
 
 ### Loading new stock
-Load up your items into an array of hashes then load them with #load_items:
+Load up your items into an array of hashes then load them with inventory's #load_items method:
 ```ruby
 new_stock = [
   { name: 'Swizzles', code: 'A5', price: 1.25, quantity: 2 },
@@ -103,8 +121,3 @@ new_stock = [
 vending_machine.inventory.load_items(items: new_stock)
 ```
 Your vending machine is ready to dispense new goodies again!
-
-## Dependencies
-*  Ruby 2.6.0
-*  RSpec
-*  Rubocop
